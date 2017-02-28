@@ -1,5 +1,6 @@
 package edu.washington.devinb5.arewethereyet;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -7,10 +8,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.support.v4.content.ContextCompat;
 
 public class MainActivity extends Activity {
     private PendingIntent toaster;
@@ -90,6 +93,9 @@ public class MainActivity extends Activity {
         public void onReceive(Context context, Intent intent) {
             String[] toastContents = {intent.getStringExtra("PhoneNumber"), intent.getStringExtra("Message")};
             Toast.makeText(context, toastContents[0] + ": " + toastContents[1], Toast.LENGTH_SHORT).show();
+            int i = ContextCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS);
+            SmsManager sms = SmsManager.getDefault();
+            sms.sendTextMessage(toastContents[0], null, toastContents[1], null, null);
         }
 
 
